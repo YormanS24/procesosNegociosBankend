@@ -1,0 +1,12 @@
+Parcial9\repository\UsuarioRepository.class
+Parcial9\utils\JWTUtil.class
+Parcial9\controller\UsuarioController.class
+Parcial9\services\UsuarioService.class
+Parcial9\services\ArticuloService.class
+Parcial9\config\WebSecurityConfig.class
+Parcial9\controller\AuthController.class
+Parcial9\model\Usuario.class
+Parcial9\services\CategoriaService.class
+Parcial9\services\ArticuloServiceImpl.class
+Parcial9\services\UsuarioServiceImpl.class
+Parcial9\services\CategoriaServiceImpl.class
