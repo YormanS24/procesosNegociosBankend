@@ -46,12 +46,12 @@ public class ArticulosServiceMockTest {
         modelo.setPrecio_venta("2000");
         modelo.setPrecio_compra("5000");
         modelo.setFecha_registro(new Date(10,10,20));
-
         return modelo;
     }
+
+
     @InjectMocks
     private ArticuloServiceImpl articuloService;
-
     @Mock
     private ArticuloRepository articuloRepository;
 
@@ -61,28 +61,23 @@ public class ArticulosServiceMockTest {
 
         //Given
         Articulo articulo = mockArticulo();
-
+        Articulo articuloMod = mockArticulo();
         //When
         when(articuloRepository.findByCodigo(anyLong())).thenReturn(Optional.of(articulo));
-        ResponseEntity<Articulo> respuesta = articuloService.getArticleFindBycodige(articulo.getCodigo());
+        ResponseEntity<Articulo> respuesta = articuloService.getArticleFindBycodige(articuloMod.getCodigo());
 
         //Then
         Assertions.assertNotNull(respuesta);
 
     }
 
+
     @DisplayName("Test para listar a los Articulos")
     @Test
     void getAllArticlesTest() {
 
-        //Given
         Articulo articulo = mockArticulo();
-
-        //When
-
         ResponseEntity<List<Articulo>> lista = articuloService.allArticles();
-
-        //Then
         Assertions.assertNotNull(lista);
     }
 
@@ -91,8 +86,9 @@ public class ArticulosServiceMockTest {
     void createArticleTest() {
         //Given
         Articulo articulo = mockArticulo();
+        Articulo articuloMod = mockArticulo();
         given(articuloRepository.findByCodigo(articulo.getCodigo())).willReturn(Optional.of(articulo));
-        given(articuloRepository.save(articulo)).willReturn(articulo);
+        given(articuloRepository.save(articuloMod)).willReturn(articuloMod);
         //When
 
         ResponseEntity<Articulo> articuloGuardado = articuloService.createArticle(articulo);
@@ -118,29 +114,6 @@ public class ArticulosServiceMockTest {
         Assertions.assertNotNull(articuloGuardado);
     }
 
-    @DisplayName("Test para eliminar un Articulo")
-    @Test
-    void deleteArticleTest() {
-        //Given
-        Articulo articulo = mockArticulo();
-
-
-        given(articuloRepository.findByCodigo(articulo.getCodigo())).willReturn(Optional.of(articulo));
-        articuloRepository.deleteById(articulo.getCodigo());
-
-
-
-        //when
-
-        Optional<Articulo> elmArticulo = articuloRepository.findById(articulo.getCodigo());
-
-        //Then
-
-        assertThat(elmArticulo).isEmpty();
-
-
-    }
-
     @Test
     @DisplayName("Test para una lista vacia")
     void listaArticulosVacia() {
@@ -149,5 +122,14 @@ public class ArticulosServiceMockTest {
 
         Assertions.assertNotNull(mockArticleService);
         Assertions.assertEquals( 404, mockArticleService.getStatusCodeValue());
+    }
+
+    @Test
+    void whenNoEncuentraNingunArticulo() {
+        Articulo articulo = null;
+
+        when(articuloRepository.findAll()).thenReturn(Collections.emptyList());
+        List<Articulo> articulo1 = articuloService.allArticles().getBody();
+        Assertions.assertEquals(null, articulo1);
     }
 }
